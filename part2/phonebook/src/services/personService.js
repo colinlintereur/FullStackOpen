@@ -6,12 +6,19 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const create = (newObject) => {
-  const request = axios.post(baseUrl, newObject);
+const create = (newPerson) => {
+  const request = axios.post(baseUrl, newPerson);
   return request.then((response) => response.data);
+};
+
+const deletePerson = (person) => {
+  return window.confirm(`Delete ${person.name}?`)
+    ? axios.delete(`${baseUrl}/${person.id}`).then(true)
+    : Promise.resolve(false);
 };
 
 export default {
   getAll,
   create,
+  deletePerson,
 };

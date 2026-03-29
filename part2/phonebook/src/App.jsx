@@ -35,6 +35,14 @@ const App = () => {
     });
   };
 
+  const deletePerson = (person) => {
+    personService.deletePerson(person).then((isDeleted) => {
+      if (isDeleted) {
+        setPersons(persons.filter((p) => p.id !== person.id));
+      }
+    });
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -48,7 +56,7 @@ const App = () => {
         addPerson={addPerson}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson} />
     </div>
   );
 };
