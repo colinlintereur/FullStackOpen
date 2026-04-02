@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [message, setMessage] = useState(null);
+  const [color, setColor] = useState("");
 
   useEffect(() => {
     personService.getAll().then((persons) => {
@@ -41,6 +42,7 @@ const App = () => {
       setNewName("");
       setNewNumber("");
 
+      setColor("green");
       setMessage(`Added ${newPerson.name}`);
       setTimeout(() => {
         setMessage(null);
@@ -49,18 +51,30 @@ const App = () => {
   };
 
   const updatePerson = (person) => {
-    personService.updateNumber(person).then((isUpdated) => {
-      if (isUpdated) {
-        setPersons(persons.map((p) => (p.id === person.id ? person : p)));
-        setNewName("");
-        setNewNumber("");
+    personService
+      .updateNumber(person)
+      .then((isUpdated) => {
+        if (isUpdated) {
+          setPersons(persons.map((p) => (p.id === person.id ? person : p)));
+          setNewName("");
+          setNewNumber("");
 
-        setMessage(`Updated ${person.name}`);
+          setColor("green");
+          setMessage(`Updated ${person.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        }
+      })
+      .catch((error) => {
+        setColor("red");
+        setMessage(
+          `Information of ${person.name} has already been removed from server`,
+        );
         setTimeout(() => {
           setMessage(null);
         }, 5000);
-      }
-    });
+      });
   };
 
   const deletePerson = (person) => {
@@ -74,7 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} color={color} />
       <Filter filter={filter} setFilter={setFilter} />
       <h3>Add a new</h3>
       <PersonForm
