@@ -11,6 +11,14 @@ const create = (newPerson) => {
   return request.then((response) => response.data);
 };
 
+const updateNumber = (updatedPerson) => {
+  return window.confirm(
+    `${updatedPerson.name} is already added to phonebook, replace the old number with a new one?`,
+  )
+    ? axios.put(`${baseUrl}/${updatedPerson.id}`, updatedPerson).then(true)
+    : Promise.resolve(false);
+};
+
 const deletePerson = (person) => {
   return window.confirm(`Delete ${person.name}?`)
     ? axios.delete(`${baseUrl}/${person.id}`).then(true)
@@ -20,5 +28,6 @@ const deletePerson = (person) => {
 export default {
   getAll,
   create,
+  updateNumber,
   deletePerson,
 };

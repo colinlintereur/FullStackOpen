@@ -18,9 +18,15 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.findIndex((p) => p.name === newName) >= 0) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+    const personsIndex = persons.findIndex((p) => p.name === newName);
+
+    if (personsIndex >= 0) {
+      const updatedPerson = {
+        ...persons[personsIndex],
+        number: newNumber,
+        id: persons[personsIndex].id,
+      };
+      return updatePerson(updatedPerson);
     }
 
     const person = {
@@ -32,6 +38,16 @@ const App = () => {
       setPersons(persons.concat(newPerson));
       setNewName("");
       setNewNumber("");
+    });
+  };
+
+  const updatePerson = (person) => {
+    personService.updateNumber(person).then((isUpdated) => {
+      if (isUpdated) {
+        setPersons(persons.map((p) => (p.id === person.id ? person : p)));
+        setNewName("");
+        setNewNumber("");
+      }
     });
   };
 
